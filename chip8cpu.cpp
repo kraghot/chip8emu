@@ -142,7 +142,7 @@ void chip8cpu::emulateCycle()
         registers[(opcode & 0x0F00) >> 16] = opcode & 0x00FF;
         break;
 
-    case 0x6000:
+    case 0x7000:
         registers[(opcode & 0x0F00) >> 16] += opcode & 0x00FF;
         break;
 
