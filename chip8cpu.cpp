@@ -96,7 +96,7 @@ void chip8cpu::emulateCycle()
         switch(opcode & 0x000F)
         {
             case 0x0000: // 0x00E0: Clears the screen
-            printf("FIXME: Unimplemented opcode %X\n", opcode);
+            std::fill(std::begin(gfx), std::end(gfx), 0);
             break;
 
             case 0x000E: // 0x00EE: Returns from subroutine
@@ -171,23 +171,34 @@ void chip8cpu::emulateCycle()
             registers[X8] = registers[X8] ^ registers[Y8];
             break;
         case 4:
-            // FIXME: Add setting the VF flag to carry
+            if (registers[Y8] > (0xFF - X8))
+                registers[0xF] = 1;
+            else
+                registers[0xF] = 0;
+
             registers[X8] += registers[Y8];
             break;
         case 5:
-            // FIXME: VF is set to 0 when there's a borrow, and 1 when there isn't.
+            if (registers[X8] < registers[Y8])
+                registers[0xF] = 1;
+            else
+                registers[0xF] = 0;
+
             registers[X8] -= registers[Y8];
             break;
         case 6:
-            // FIXME: VF is set to the value of the least significant bit of VX before the shift
+            registers[0xF] = registers[X8] & 0x000F;
             registers[X8] = registers[X8] >> 1;
             break;
         case 7:
-            // FIXME: VF is set to borrow
+            if (registers[X8] > registers[Y8])
+                registers[0xF] = 1;
+            else
+                registers[0xF] = 0;
             registers[X8] = registers[Y8] - registers[X8];
             break;
         case 14:
-            // FIXME: VF is set to the value of the most significant bit of VX before the shift
+            registers[0xF] = registers[X8] >> 7;
             registers[X8] = registers[X8] << 1;
             break;
 
