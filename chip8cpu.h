@@ -24,7 +24,7 @@ private:
     SDL_Renderer*   renderer;
 
     uint16_t    opcode;
-    uint8_t     memory[4096];
+    uint8_t     memory[4096]    =   {0};
     uint8_t     registers[16];
     uint16_t    indexReg;
     uint16_t    programCounter;
@@ -60,6 +60,7 @@ private:
     };
 
     std::ifstream programFile;
+    long unsigned int fileSize;
 
     uint8_t X8;
     uint8_t Y8;

@@ -67,6 +67,7 @@ bool chip8cpu::onInit()
     indexReg        = 0;        // Clear index reg
     stackPointer    = 0;        // Reset stack pointer
 
+
     // Clear display
     // Clear stack
     // Clear registers V0-VF
@@ -76,9 +77,12 @@ bool chip8cpu::onInit()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-    programFile.open("../testfile.dat", std::ios::binary | std::ios::in);
-    programFile.read( (char*) &memory[512], programFile.tellg());
-
+    programFile.open("../roms/PONG", std::ios::binary | std::ios::in);
+    programFile.seekg(0, std::ios::end);
+    fileSize = programFile.tellg();
+    programFile.seekg(0, std::ios::beg);
+    programFile.read( (char*) &memory[512], fileSize);
+    programFile.close();
 
     return true;
 }
@@ -291,15 +295,15 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x0033:
-            memory[I]     = V[(opcode & 0x0F00) >> 8] / 100;
-            memory[I + 1] = (V[(opcode & 0x0F00) >> 8] / 10) % 10;
-            memory[I + 2] = (V[(opcode & 0x0F00) >> 8] % 100) % 10;
+            memory[indexReg]     = registers[(opcode & 0x0F00) >> 8] / 100;
+            memory[indexReg + 1] = (registers[(opcode & 0x0F00) >> 8] / 10) % 10;
+            memory[indexReg + 2] = (registers[(opcode & 0x0F00) >> 8] % 100) % 10;
             break;
 
         case 0x0055:
             for (int i = 0; i < 16; i++)
             {
-                memory[indexReg + i] = registers[i]
+                memory[indexReg + i] = registers[i];
             }
             break;
 
