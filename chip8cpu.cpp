@@ -91,16 +91,31 @@ void chip8cpu::emulateCycle()
         switch(opcode & 0x000F)
         {
             case 0x0000: // 0x00E0: Clears the screen
-            // Execute opcode
+            printf("FIXME: Unimplemented opcode %X\n", opcode);
             break;
 
             case 0x000E: // 0x00EE: Returns from subroutine
-            // Execute opcode
+            programCounter = stack[--stackPointer];
+            programCounter += 2;
             break;
 
             default:
             printf ("Unknown opcode [0x0000]: 0x%X\n", opcode);
         }
+        break;
+
+    case 0x1000:
+        programCounter = opcode & 0x0FFF;
+        break;
+
+    case 0x2000:
+      stack[stackPointer] = programCounter;
+      ++stackPointer;
+      programCounter = opcode & 0x0FFF;
+    break;
+
+    case 0x3000:
+
         break;
 
     case 0xA000: // ANNN set adress to NNN
@@ -135,14 +150,10 @@ void chip8cpu::emulateCycle()
     }
     break;
 
-    case 0x2000:
-      stack[stackPointer] = programCounter;
-      ++stackPointer;
-      programCounter = opcode & 0x0FFF;
-    break;
 
     default:
         printf("Unknown opcode 0x%X\n", opcode);
+        programCounter += 2;
         break;
     }
 
