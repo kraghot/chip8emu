@@ -3,14 +3,23 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <iostream>
+#include <string>
+#include <SDL2/SDL.h>
+
+
 
 class chip8cpu
 {
 public:
     chip8cpu();
-    void initialize();
+    bool onInit();
     void emulateCycle();
 private:
+    bool            Running;
+    SDL_Window*     screen;
+    SDL_Renderer*   renderer;
+
     uint16_t opcode;
     uint8_t memory[4096];
     uint8_t registers[16];

@@ -2,9 +2,14 @@ TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
+LIBS += -lSDL2
 
 SOURCES += main.cpp \
-    chip8cpu.cpp
+    chip8cpu.cpp \
 
 HEADERS += \
-    chip8cpu.h
+    chip8cpu.h \
+    test.bmp
+
+DISTFILES += \
+    test.bmp

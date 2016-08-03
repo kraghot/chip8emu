@@ -1,14 +1,65 @@
 #include "chip8cpu.h"
-#include <SDL2/SDL.h>
 
 chip8cpu::chip8cpu()
 {
 
 }
 
-bool chip8cpu::initialize()
+bool chip8cpu::onInit()
 {
 
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        return false;
+    }
+
+    screen = SDL_CreateWindow("CHIP8 Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
+    if(screen == nullptr)
+    {
+        SDL_Quit();
+        return false;
+    }
+
+    renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if(renderer == nullptr)
+    {
+        SDL_DestroyWindow(screen);
+        SDL_Quit();
+        return false;
+    }
+
+    std::string imagePath = "test.bmp";
+    SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
+    if (bmp == nullptr){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(screen);
+        std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, bmp);
+    SDL_FreeSurface(bmp);
+    if (tex == nullptr){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(screen);
+        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
+    }
+
+    for (int i = 0; i < 3; ++i){
+        //First clear the renderer
+        SDL_RenderClear(renderer);
+        //Draw the texture
+        SDL_RenderCopy(renderer, tex, NULL, NULL);
+        //Update the screen
+        SDL_RenderPresent(renderer);
+        //Take a quick break after all that hard work
+        SDL_Delay(1000);
+    }
 
     programCounter  = 0x200;    // Uvijek pocinje na 200
     opcode          = 0;        // Clear opcode
@@ -24,8 +75,10 @@ bool chip8cpu::initialize()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-    FILE buffer = fopen("testfile.dat", "rb");
+//    FILE buffer = fopen("testfile.dat", "rb");
 
+
+    return true;
 }
 
 void chip8cpu::emulateCycle()
