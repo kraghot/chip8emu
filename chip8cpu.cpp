@@ -7,6 +7,7 @@ chip8cpu::chip8cpu()
 
 bool chip8cpu::onInit()
 {
+    srand (time(NULL));
 
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -210,6 +211,12 @@ void chip8cpu::emulateCycle()
         programCounter += (opcode & 0x0FFF) + registers[0];
         break;
 
+    case 0xC000:
+        randomNumber = rand() % 256;
+        registers[(opcode & 0x0F00) >> 16] = randomNumber & (opcode & 0x00FF);
+        programCounter += 2;
+        break;
+
     case 0xD000:
     {
       unsigned short x = registers[(opcode & 0x0F00) >> 8];
@@ -237,6 +244,21 @@ void chip8cpu::emulateCycle()
     }
     break;
 
+    case 0xE000:
+        keyPressedFlag = key[registers[(opcode & 0x0F00) >> 16]];
+        switch (opcode & 0x00FF){
+            case 0x009E:
+                if(keyPressedFlag) programCounter += 2;
+                break;
+            case 0x00A1:
+                if(!keyPressedFlag) programCounter += 2;
+                break;
+            default:
+                printf("Unknown opcode 0x%X\n", opcode);
+                break;
+        }
+        programCounter += 2;
+        break;
 
     default:
         printf("Unknown opcode 0x%X\n", opcode);

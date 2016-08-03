@@ -1,12 +1,14 @@
 #ifndef CHIP8CPU_H
 #define CHIP8CPU_H
 
-#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <iostream>
-#include <string>
-#include <SDL2/SDL.h>
 #include <fstream>
+#include <string>
+#include <time.h>
+#include <SDL2/SDL.h>
 
 
 
@@ -61,6 +63,8 @@ private:
 
     uint8_t X8;
     uint8_t Y8;
+    uint8_t randomNumber;
+    bool    keyPressedFlag;
 };
 
 #endif // CHIP8CPU_H
