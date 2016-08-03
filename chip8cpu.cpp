@@ -260,6 +260,48 @@ void chip8cpu::emulateCycle()
         programCounter += 2;
         break;
 
+    case 0xF000:
+        X8 = (opcode & 0x0F00) >> 16;
+
+        switch (opcode & 0x00FF) {
+        case 0x0007:
+
+            break;
+        case 0x000A:
+
+            break;
+        case 0x0007:
+
+            break;
+        case 0x0015:
+
+            break;
+        case 0x0018:
+
+            break;
+        case 0x001E:
+
+            break;
+        case 0x0029:
+
+            break;
+        case 0x0033:
+
+            break;
+        case 0x0055:
+
+            break;
+        case 0x0065:
+
+            break;
+
+        default:
+            printf("Unknown opcode 0x%X\n", opcode);
+            break;
+        }
+
+        break;
+
     default:
         printf("Unknown opcode 0x%X\n", opcode);
         programCounter += 2;
