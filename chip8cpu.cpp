@@ -140,10 +140,61 @@ void chip8cpu::emulateCycle()
 
     case 0x6000:
         registers[(opcode & 0x0F00) >> 16] = opcode & 0x00FF;
+        programCounter += 2;
         break;
 
     case 0x7000:
         registers[(opcode & 0x0F00) >> 16] += opcode & 0x00FF;
+        programCounter += 2;
+        break;
+
+    case 0x8000:
+        X8 = opcode & 0x0F00 >> 16;
+        Y8 = opcode & 0x00F0 >> 8;
+
+        switch (opcode & 0x000F) {
+        case 0:
+            registers[X8] = registers[Y8];
+            break;
+        case 1:
+            registers[X8] = registers[X8] | registers[Y8];
+            break;
+        case 2:
+            registers[X8] = registers[X8] & registers[Y8];
+            break;
+        case 3:
+            registers[X8] = registers[X8] ^ registers[Y8];
+            break;
+        case 4:
+            // FIXME: Add setting the VF flag to carry
+            registers[X8] += registers[Y8];
+            break;
+        case 5:
+            // FIXME: VF is set to 0 when there's a borrow, and 1 when there isn't.
+            registers[X8] -= registers[Y8];
+            break;
+        case 6:
+            // FIXME: VF is set to the value of the least significant bit of VX before the shift
+            registers[X8] = registers[X8] >> 1;
+            break;
+        case 7:
+            // FIXME: VF is set to borrow
+            registers[X8] = registers[Y8] - registers[X8];
+            break;
+        case 14:
+            // FIXME: VF is set to the value of the most significant bit of VX before the shift
+            registers[X8] = registers[X8] << 1;
+            break;
+
+        default:
+            printf ("Unknown opcode [0x8XY?]: 0x%X\n", opcode);
+            break;
+        }
+
+        break;
+
+    case 0x9000:
+
         break;
 
     case 0xA000: // ANNN set adress to NNN

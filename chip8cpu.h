@@ -58,6 +58,9 @@ private:
     };
 
     std::ifstream programFile;
+
+    uint8_t X8;
+    uint8_t Y8;
 };
 
 #endif // CHIP8CPU_H
