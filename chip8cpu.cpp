@@ -138,6 +138,10 @@ void chip8cpu::emulateCycle()
         programCounter += 2;
         break;
 
+    case 0x6000:
+        registers[(opcode & 0x0F00) >> 16] = opcode & 0x00FF;
+        break;
+
     case 0xA000: // ANNN set adress to NNN
         indexReg = opcode & 0x0FFF;
         programCounter += 2;
