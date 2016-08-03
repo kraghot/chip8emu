@@ -264,40 +264,57 @@ void chip8cpu::emulateCycle()
         X8 = (opcode & 0x0F00) >> 16;
 
         switch (opcode & 0x00FF) {
+
         case 0x0007:
             registers[X8] = delayTimer;
             break;
+
         case 0x000A:
             //implement
             break;
+
         case 0x0015:
             delayTimer = registers[X8];
             break;
+
         case 0x0018:
             soundTimer = registers[X8];
             break;
+
         case 0x001E:
             indexReg += registers[X8];
             break;
+
         case 0x0029:
             // Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.
             indexReg = registers[X8] * 4;
             break;
+
         case 0x0033:
-
+            memory[I]     = V[(opcode & 0x0F00) >> 8] / 100;
+            memory[I + 1] = (V[(opcode & 0x0F00) >> 8] / 10) % 10;
+            memory[I + 2] = (V[(opcode & 0x0F00) >> 8] % 100) % 10;
             break;
+
         case 0x0055:
-
+            for (int i = 0; i < 16; i++)
+            {
+                memory[indexReg + i] = registers[i]
+            }
             break;
-        case 0x0065:
 
+        case 0x0065:
+            for (int i = 0; i < 16; i++)
+            {
+                registers[i] = memory[indexReg + i];
+            }
             break;
 
         default:
             printf("Unknown opcode 0x%X\n", opcode);
             break;
         }
-
+        programCounter += 2;
         break;
 
     default:
