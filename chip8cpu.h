@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <SDL2/SDL.h>
+#include <fstream>
 
 
 
@@ -54,6 +55,8 @@ private:
       0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
       0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
+
+    std::ifstream programFile;
 };
 
 #endif // CHIP8CPU_H

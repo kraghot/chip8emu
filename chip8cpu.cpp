@@ -30,7 +30,7 @@ bool chip8cpu::onInit()
         return false;
     }
 
-    std::string imagePath = "test.bmp";
+    std::string imagePath = "../test.bmp";
     SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
     if (bmp == nullptr){
         SDL_DestroyRenderer(renderer);
@@ -75,7 +75,8 @@ bool chip8cpu::onInit()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-//    FILE buffer = fopen("testfile.dat", "rb");
+    programFile.open("../testfile.dat", std::ios::binary | std::ios::in);
+    programFile.read( (char*) &memory[512], programFile.tellg());
 
 
     return true;
@@ -85,9 +86,25 @@ void chip8cpu::emulateCycle()
 {
     opcode = memory[programCounter] << 8 | memory[programCounter + 1];
 
-    if ((opcode & 0xF000) == 0xA000)
-    {
+    switch (opcode & 0xF000) {
+    case 0xA000: // ANNN set adress to NNN
         indexReg = opcode & 0x0FFF;
+        programCounter += 2;
+        break;
+    default:
+        printf("Unknown opcode 0x%X\n", opcode);
+        break;
+    }
+
+    if(delayTimer > 0)
+    {
+        --delayTimer;
+    }
+
+    if(soundTimer > 0)
+    {
+        if(soundTimer == 1) printf("BEEEP!\n");
+        --soundTimer;
     }
 }
 
