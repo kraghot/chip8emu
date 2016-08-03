@@ -190,16 +190,24 @@ void chip8cpu::emulateCycle()
             printf ("Unknown opcode [0x8XY?]: 0x%X\n", opcode);
             break;
         }
-
+        programCounter += 2;
         break;
 
     case 0x9000:
-
+        if (registers[(opcode & 0x0F00) >> 16] != registers[(opcode & 0x00F0) >> 8])
+        {
+            programCounter += 2;
+        }
+        programCounter += 2;
         break;
 
     case 0xA000: // ANNN set adress to NNN
         indexReg = opcode & 0x0FFF;
         programCounter += 2;
+        break;
+
+    case 0xB000:
+        programCounter += (opcode & 0x0FFF) + registers[0];
         break;
 
     case 0xD000:
