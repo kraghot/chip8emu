@@ -87,10 +87,60 @@ void chip8cpu::emulateCycle()
     opcode = memory[programCounter] << 8 | memory[programCounter + 1];
 
     switch (opcode & 0xF000) {
+    case 0x0000:
+        switch(opcode & 0x000F)
+        {
+            case 0x0000: // 0x00E0: Clears the screen
+            // Execute opcode
+            break;
+
+            case 0x000E: // 0x00EE: Returns from subroutine
+            // Execute opcode
+            break;
+
+            default:
+            printf ("Unknown opcode [0x0000]: 0x%X\n", opcode);
+        }
+        break;
+
     case 0xA000: // ANNN set adress to NNN
         indexReg = opcode & 0x0FFF;
         programCounter += 2;
         break;
+
+    case 0xD000:
+    {
+      unsigned short x = registers[(opcode & 0x0F00) >> 8];
+      unsigned short y = registers[(opcode & 0x00F0) >> 4];
+      unsigned short height = opcode & 0x000F;
+      unsigned short pixel;
+
+      registers[0xF] = 0;
+      for (int yline = 0; yline < height; yline++)
+      {
+        pixel = memory[indexReg + yline];
+        for(int xline = 0; xline < 8; xline++)
+        {
+          if((pixel & (0x80 >> xline)) != 0)
+          {
+            if(gfx[(x + xline + ((y + yline) * 64))] == 1)
+              registers[0xF] = 1;
+            gfx[x + xline + ((y + yline) * 64)] ^= 1;
+          }
+        }
+      }
+
+      drawFlag = true;
+      programCounter += 2;
+    }
+    break;
+
+    case 0x2000:
+      stack[stackPointer] = programCounter;
+      ++stackPointer;
+      programCounter = opcode & 0x0FFF;
+    break;
+
     default:
         printf("Unknown opcode 0x%X\n", opcode);
         break;

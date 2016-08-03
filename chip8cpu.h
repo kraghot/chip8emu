@@ -35,6 +35,7 @@ private:
     uint16_t stack[16];
     uint16_t stackPointer;
     uint8_t key[16];
+    bool drawFlag = false;
 
     uint8_t chip8_fontset[80] =
     {
