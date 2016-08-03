@@ -117,15 +117,25 @@ void chip8cpu::emulateCycle()
     case 0x3000:
         if (registers[(opcode & 0x0F00) >> 16] == (opcode & 0x00FF))
         {
-            programCounter += 4;
+            programCounter += 2;
         }
+        programCounter += 2;
         break;
 
     case 0x4000:
         if (registers[(opcode & 0x0F00) >> 16] != (opcode & 0x00FF))
         {
-            programCounter += 4;
+            programCounter += 2;
         }
+        programCounter += 2;
+        break;
+
+    case 0x5000:
+        if (registers[(opcode & 0x0F00) >> 16] == registers[(opcode & 0x00F0) >> 8])
+        {
+            programCounter += 2;
+        }
+        programCounter += 2;
         break;
 
     case 0xA000: // ANNN set adress to NNN
