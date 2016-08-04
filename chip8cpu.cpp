@@ -378,7 +378,7 @@ void chip8cpu::drawToWindow()
     SDL_Rect rect;
     for (int j = 0; j < h; j++){
         for (int i = 0; i < w; i++){
-            if(gfx[i + j * h])
+            if(gfx[i + j * 64])
             {
                 rect.w = 2;
                 rect.h = 2;
