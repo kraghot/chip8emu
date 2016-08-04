@@ -350,6 +350,43 @@ void chip8cpu::emulateCycle()
     }
 }
 
-//  FX33	Stores the binary-coded decimal representation of VX, with the most significant of three digits at the address in I, the middle digit at I plus 1, and the least significant digit at I plus 2. (In other words, take the decimal representation of VX, place the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.)
-//  FX55	Stores V0 to VX (including VX) in memory starting at address I.[4]
-//  FX65	Fills V0 to VX (including VX) with values from memory starting at address I.[4]0
+void chip8cpu::drawBMP() {
+    const int w = 64;
+    const int h = 32;
+    int filesize = 54 + 3*w*h;  //w is your image width, h is image height, both int
+
+    unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
+    unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0};
+    unsigned char bmppad[3] = {0,0,0};
+
+    bmpfileheader[ 2] = (unsigned char)(filesize    );
+    bmpfileheader[ 3] = (unsigned char)(filesize>> 8);
+    bmpfileheader[ 4] = (unsigned char)(filesize>>16);
+    bmpfileheader[ 5] = (unsigned char)(filesize>>24);
+
+    bmpinfoheader[ 4] = (unsigned char)(       w    );
+    bmpinfoheader[ 5] = (unsigned char)(       w>> 8);
+    bmpinfoheader[ 6] = (unsigned char)(       w>>16);
+    bmpinfoheader[ 7] = (unsigned char)(       w>>24);
+    bmpinfoheader[ 8] = (unsigned char)(       h    );
+    bmpinfoheader[ 9] = (unsigned char)(       h>> 8);
+    bmpinfoheader[10] = (unsigned char)(       h>>16);
+    bmpinfoheader[11] = (unsigned char)(       h>>24);
+
+    memcpy(bmpImage, bmpfileheader, 14);
+    memcpy(bmpImage, bmpinfoheader, 40);
+
+    uint8_t img[64*32*4];
+
+    for (int j = 0; j < h; j++)
+    {
+        for (int i = 0; i < w; i++)
+        {
+            if (gfx[i][j])
+            {
+                memcpy
+            }
+        }
+    }
+
+}
