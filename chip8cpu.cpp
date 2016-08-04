@@ -59,7 +59,7 @@ bool chip8cpu::onInit()
         //Update the screen
         SDL_RenderPresent(renderer);
         //Take a quick break after all that hard work
-        SDL_Delay(1000);
+        SDL_Delay(16.6f);
     }
 
     programCounter  = 0x200;    // Uvijek pocinje na 200
@@ -81,7 +81,7 @@ bool chip8cpu::onInit()
     programFile.seekg(0, std::ios::end);
     fileSize = programFile.tellg();
     programFile.seekg(0, std::ios::beg);
-    programFile.read( (char*) &memory[512], fileSize);
+    programFile.read( (char*) &memory[0x200], fileSize);
     programFile.close();
 
     return true;
@@ -101,7 +101,6 @@ void chip8cpu::emulateCycle()
 
             case 0x000E: // 0x00EE: Returns from subroutine
             programCounter = stack[--stackPointer];
-            programCounter += 2;
             break;
 
             default:
@@ -120,7 +119,7 @@ void chip8cpu::emulateCycle()
     break;
 
     case 0x3000:
-        if (registers[(opcode & 0x0F00) >> 16] == (opcode & 0x00FF))
+        if (registers[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF))
         {
             programCounter += 2;
         }
@@ -128,7 +127,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x4000:
-        if (registers[(opcode & 0x0F00) >> 16] != (opcode & 0x00FF))
+        if (registers[(opcode & 0x0F00) >> 8] != (opcode & 0x00FF))
         {
             programCounter += 2;
         }
@@ -136,7 +135,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x5000:
-        if (registers[(opcode & 0x0F00) >> 16] == registers[(opcode & 0x00F0) >> 8])
+        if (registers[(opcode & 0x0F00) >> 8] == registers[(opcode & 0x00F0) >> 8])
         {
             programCounter += 2;
         }
@@ -144,18 +143,18 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x6000:
-        registers[(opcode & 0x0F00) >> 16] = opcode & 0x00FF;
+        registers[(opcode & 0x0F00) >> 8] = opcode & 0x00FF;
         programCounter += 2;
         break;
 
     case 0x7000:
-        registers[(opcode & 0x0F00) >> 16] += opcode & 0x00FF;
+        registers[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
         programCounter += 2;
         break;
 
     case 0x8000:
-        X8 = opcode & 0x0F00 >> 16;
-        Y8 = opcode & 0x00F0 >> 8;
+        X8 = opcode & 0x0F00 >> 8;
+        Y8 = opcode & 0x00F0 >> 4;
 
         switch (opcode & 0x000F) {
         case 0:
@@ -210,7 +209,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x9000:
-        if (registers[(opcode & 0x0F00) >> 16] != registers[(opcode & 0x00F0) >> 8])
+        if (registers[(opcode & 0x0F00) >> 8] != registers[(opcode & 0x00F0) >> 4])
         {
             programCounter += 2;
         }
@@ -260,7 +259,7 @@ void chip8cpu::emulateCycle()
     break;
 
     case 0xE000:
-        keyPressedFlag = key[registers[(opcode & 0x0F00) >> 16]];
+        keyPressedFlag = key[registers[(opcode & 0x0F00) >> 8]];
         switch (opcode & 0x00FF){
             case 0x009E:
                 if(keyPressedFlag) programCounter += 2;
@@ -276,7 +275,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0xF000:
-        X8 = (opcode & 0x0F00) >> 16;
+        X8 = (opcode & 0x0F00) >> 8;
 
         switch (opcode & 0x00FF) {
 
@@ -312,14 +311,14 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x0055:
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < X8; i++)
             {
                 memory[indexReg + i] = registers[i];
             }
             break;
 
         case 0x0065:
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < X8; i++)
             {
                 registers[i] = memory[indexReg + i];
             }
@@ -368,32 +367,28 @@ void chip8cpu::makeBMP() {
 
 void chip8cpu::drawToWindow()
 {
-    SDL_RWops* rwop = SDL_RWFromMem(image->data(), 54 + 64*32*4);
+    const int w = 64;
+    const int h = 32;
 
-    SDL_Surface *bmp = SDL_LoadBMP_RW(rwop, 0);
-//    SDL_Surface *bmp = SDL_LoadBMP(reinterpret_cast<const char*>(image->data()) );
-    if (bmp == nullptr){
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(screen);
-        std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        exit(1);
-    }
-
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, bmp);
-    SDL_FreeSurface(bmp);
-    if (tex == nullptr){
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(screen);
-        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        exit(1);
-    }
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
     SDL_RenderClear(renderer);
-    //Draw the texture
-    SDL_RenderCopy(renderer, tex, NULL, NULL);
-    //Update the screen
-    SDL_RenderPresent(renderer);
 
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+    SDL_Rect rect;
+    for (int j = 0; j < h; j++){
+        for (int i = 0; i < w; i++){
+            if(gfx[i + j * h])
+            {
+                rect.w = 2;
+                rect.h = 2;
+                rect.x = i;
+                rect.y = i;
+                SDL_RenderFillRect(renderer, &rect);
+            }
+        }
+    }
+
+    SDL_RenderPresent(renderer);
 }

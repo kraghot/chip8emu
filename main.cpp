@@ -7,12 +7,12 @@ int main(int argc, char *argv[])
 {
     std::cout << "Hello World!" << std::endl;
     CPU.onInit();
-    for( int i = 0; i < 50; i++)
+    for( int i = 0; i < 1000; i++)
     {
         CPU.emulateCycle();
-        CPU.makeBMP();
+//        CPU.makeBMP();
         CPU.drawToWindow();
-        SDL_Delay(1000);
+        SDL_Delay(16);
     }
     return 0;
 }

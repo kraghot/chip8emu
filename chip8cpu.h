@@ -28,7 +28,7 @@ private:
 
     uint16_t        opcode;
     uint8_t         memory[4096]    =   {0};
-    uint8_t         registers[16];
+    uint8_t         registers[16]   =   {0};
     uint16_t        indexReg;
     uint16_t        programCounter;
     // 0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
