@@ -77,7 +77,7 @@ bool chip8cpu::onInit()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-    programFile.open("../roms/15PUZZLE", std::ios::binary | std::ios::in);
+    programFile.open("../roms/PONG", std::ios::binary | std::ios::in);
     programFile.seekg(0, std::ios::end);
     fileSize = programFile.tellg();
     programFile.seekg(0, std::ios::beg);
@@ -153,8 +153,8 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x8000:
-        X8 = opcode & 0x0F00 >> 8;
-        Y8 = opcode & 0x00F0 >> 4;
+        X8 = (opcode & 0x0F00) >> 8;
+        Y8 = (opcode & 0x00F0) >> 4;
 
         switch (opcode & 0x000F) {
         case 0:
@@ -227,7 +227,7 @@ void chip8cpu::emulateCycle()
 
     case 0xC000:
         randomNumber = rand() % 256;
-        registers[(opcode & 0x0F00) >> 16] = randomNumber & (opcode & 0x00FF);
+        registers[(opcode & 0x0F00) >> 8] = randomNumber & (opcode & 0x00FF);
         programCounter += 2;
         break;
 
@@ -311,14 +311,14 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x0055:
-            for (int i = 0; i < X8; i++)
+            for (int i = 0; i <= X8; i++)
             {
                 memory[indexReg + i] = registers[i];
             }
             break;
 
         case 0x0065:
-            for (int i = 0; i < X8; i++)
+            for (int i = 0; i <= X8; i++)
             {
                 registers[i] = memory[indexReg + i];
             }
