@@ -19,7 +19,8 @@ public:
     chip8cpu();
     bool onInit();
     void emulateCycle();
-    void drawBMP();
+    void makeBMP();
+    void drawToWindow();
 private:
     bool            Running;
     SDL_Window*     screen;
@@ -41,7 +42,7 @@ private:
     uint8_t         key[16]         =   {0};
     bool            drawFlag = false;
 
-    uint8_t         bmpImage[3072]  =   {0};
+    bitmap_image* image;
 
     uint8_t chip8_fontset[80] =
     {

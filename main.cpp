@@ -10,6 +10,9 @@ int main(int argc, char *argv[])
     for( int i = 0; i < 50; i++)
     {
         CPU.emulateCycle();
+        CPU.makeBMP();
+        CPU.drawToWindow();
+        SDL_Delay(1000);
     }
     return 0;
 }

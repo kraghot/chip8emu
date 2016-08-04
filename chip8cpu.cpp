@@ -350,43 +350,50 @@ void chip8cpu::emulateCycle()
     }
 }
 
-void chip8cpu::drawBMP() {
+void chip8cpu::makeBMP() {
     const int w = 64;
     const int h = 32;
-    int filesize = 54 + 3*w*h;  //w is your image width, h is image height, both int
 
-    unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
-    unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0};
-    unsigned char bmppad[3] = {0,0,0};
+    image = new bitmap_image(64, 32);
 
-    bmpfileheader[ 2] = (unsigned char)(filesize    );
-    bmpfileheader[ 3] = (unsigned char)(filesize>> 8);
-    bmpfileheader[ 4] = (unsigned char)(filesize>>16);
-    bmpfileheader[ 5] = (unsigned char)(filesize>>24);
+    image->set_all_channels(0, 0 ,0);
 
-    bmpinfoheader[ 4] = (unsigned char)(       w    );
-    bmpinfoheader[ 5] = (unsigned char)(       w>> 8);
-    bmpinfoheader[ 6] = (unsigned char)(       w>>16);
-    bmpinfoheader[ 7] = (unsigned char)(       w>>24);
-    bmpinfoheader[ 8] = (unsigned char)(       h    );
-    bmpinfoheader[ 9] = (unsigned char)(       h>> 8);
-    bmpinfoheader[10] = (unsigned char)(       h>>16);
-    bmpinfoheader[11] = (unsigned char)(       h>>24);
-
-    memcpy(bmpImage, bmpfileheader, 14);
-    memcpy(bmpImage, bmpinfoheader, 40);
-
-    uint8_t img[64*32*4];
-
-    for (int j = 0; j < h; j++)
-    {
-        for (int i = 0; i < w; i++)
-        {
-            if (gfx[i][j])
-            {
-                memcpy
-            }
+    for (int j = 0; j < h; j++){
+        for (int i = 0; i < w; i++){
+            if(gfx[i + j * h])
+                image->set_pixel(i, j, 255, 255, 255);
         }
     }
+}
+
+void chip8cpu::drawToWindow()
+{
+    SDL_RWops* rwop = SDL_RWFromMem(image->data(), 54 + 64*32*4);
+
+    SDL_Surface *bmp = SDL_LoadBMP_RW(rwop, 0);
+//    SDL_Surface *bmp = SDL_LoadBMP(reinterpret_cast<const char*>(image->data()) );
+    if (bmp == nullptr){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(screen);
+        std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        exit(1);
+    }
+
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, bmp);
+    SDL_FreeSurface(bmp);
+    if (tex == nullptr){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(screen);
+        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        exit(1);
+    }
+
+    SDL_RenderClear(renderer);
+    //Draw the texture
+    SDL_RenderCopy(renderer, tex, NULL, NULL);
+    //Update the screen
+    SDL_RenderPresent(renderer);
 
 }

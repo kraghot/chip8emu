@@ -9,7 +9,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     chip8cpu.h \
-    test.bmp
+    bitmap_image.hpp
 
 DISTFILES += \
     test.bmp
