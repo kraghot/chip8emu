@@ -77,7 +77,7 @@ bool chip8cpu::onInit()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-    programFile.open("../roms/PONG", std::ios::binary | std::ios::in);
+    programFile.open("../roms/BLINKY", std::ios::binary | std::ios::in);
     programFile.seekg(0, std::ios::end);
     fileSize = programFile.tellg();
     programFile.seekg(0, std::ios::beg);
@@ -368,6 +368,7 @@ void chip8cpu::drawToWindow()
 {
     const int w = 64;
     const int h = 32;
+    const int scalingFactor = 8;
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
@@ -380,10 +381,10 @@ void chip8cpu::drawToWindow()
         for (int i = 0; i < w; i++){
             if(gfx[i + j * 64])
             {
-                rect.w = 2;
-                rect.h = 2;
-                rect.x = i;
-                rect.y = j;
+                rect.w = scalingFactor;
+                rect.h = scalingFactor;
+                rect.x = i*scalingFactor;
+                rect.y = j*scalingFactor;
                 SDL_RenderFillRect(renderer, &rect);
             }
         }
