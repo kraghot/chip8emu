@@ -113,7 +113,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x2000:
-      stack[stackPointer] = programCounter;
+      stack[stackPointer] = programCounter + 2;
       ++stackPointer;
       programCounter = opcode & 0x0FFF;
     break;
@@ -307,7 +307,7 @@ void chip8cpu::emulateCycle()
         case 0x0033:
             memory[indexReg]     = registers[(opcode & 0x0F00) >> 8] / 100;
             memory[indexReg + 1] = (registers[(opcode & 0x0F00) >> 8] / 10) % 10;
-            memory[indexReg + 2] = (registers[(opcode & 0x0F00) >> 8] % 100) % 10;
+            memory[indexReg + 2] = (registers[(opcode & 0x0F00) >> 8] % 100);
             break;
 
         case 0x0055:
