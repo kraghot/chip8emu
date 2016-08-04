@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     std::cout << "Hello World!" << std::endl;
     CPU.onInit();
-    for( int i = 0; i < 10000; i++)
+    while(1)
     {
         SDL_PollEvent(&Events);
         if (Events.type == SDL_QUIT){
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         CPU.emulateCycle();
 //        CPU.makeBMP();
         CPU.drawToWindow();
-        SDL_Delay(16.6f);
+        SDL_Delay(1.0f/500.0f /1000.0f);
     }
     return 0;
 }

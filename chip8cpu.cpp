@@ -77,7 +77,7 @@ bool chip8cpu::onInit()
     for(int i = 0; i < 80; ++i)
       memory[i] = chip8_fontset[i];
 
-    programFile.open("../roms/BLINKY", std::ios::binary | std::ios::in);
+    programFile.open("../roms/15PUZZLE", std::ios::binary | std::ios::in);
     programFile.seekg(0, std::ios::end);
     fileSize = programFile.tellg();
     programFile.seekg(0, std::ios::beg);
@@ -97,6 +97,7 @@ void chip8cpu::emulateCycle()
         {
             case 0x0000: // 0x00E0: Clears the screen
             std::fill(std::begin(gfx), std::end(gfx), 0);
+            programCounter += 2;
             break;
 
             case 0x000E: // 0x00EE: Returns from subroutine
