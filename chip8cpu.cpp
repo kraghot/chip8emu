@@ -113,8 +113,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x2000:
-      stack[stackPointer] = programCounter + 2;
-      ++stackPointer;
+      stack[stackPointer++] = programCounter + 2;
       programCounter = opcode & 0x0FFF;
     break;
 
