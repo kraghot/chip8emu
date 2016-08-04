@@ -384,7 +384,7 @@ void chip8cpu::drawToWindow()
                 rect.w = 2;
                 rect.h = 2;
                 rect.x = i;
-                rect.y = i;
+                rect.y = j;
                 SDL_RenderFillRect(renderer, &rect);
             }
         }
