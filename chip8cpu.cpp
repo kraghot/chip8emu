@@ -114,7 +114,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x2000:
-      stack[stackPointer++] = programCounter + 2;
+      stack[stackPointer++] = programCounter + 2; // does +2 belong here
       programCounter = opcode & 0x0FFF;
     break;
 
@@ -135,7 +135,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0x5000:
-        if (registers[(opcode & 0x0F00) >> 8] == registers[(opcode & 0x00F0) >> 8])
+        if (registers[(opcode & 0x0F00) >> 8] == registers[(opcode & 0x00F0) >> 4])
         {
             programCounter += 2;
         }
