@@ -360,22 +360,6 @@ void chip8cpu::emulateCycle()
     }
 }
 
-void chip8cpu::makeBMP() {
-    const int w = 64;
-    const int h = 32;
-
-    image = new bitmap_image(64, 32);
-
-    image->set_all_channels(0, 0 ,0);
-
-    for (int j = 0; j < h; j++){
-        for (int i = 0; i < w; i++){
-            if(gfx[i + j * h])
-                image->set_pixel(i, j, 255, 255, 255);
-        }
-    }
-}
-
 void chip8cpu::drawToWindow()
 {
     const int w = 64;

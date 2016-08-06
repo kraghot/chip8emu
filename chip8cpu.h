@@ -18,7 +18,6 @@ public:
     chip8cpu();
     bool onInit();
     void emulateCycle();
-    void makeBMP();
     void drawToWindow();
     bool getDrawFlag();
     void pollKeys();
