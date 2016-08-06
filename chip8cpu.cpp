@@ -286,7 +286,6 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x000A:
-            int sum = 0;
             for(auto i = 0; i < 16; i++)
             {
                 sum += key[i];

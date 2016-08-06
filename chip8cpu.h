@@ -71,6 +71,7 @@ private:
     uint8_t Y8;
     uint8_t randomNumber;
     bool    keyPressedFlag;
+    int     sum;
 };
 
 #endif // CHIP8CPU_H
