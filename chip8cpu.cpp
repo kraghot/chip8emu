@@ -222,7 +222,7 @@ void chip8cpu::emulateCycle()
         break;
 
     case 0xB000:
-        programCounter += (opcode & 0x0FFF) + registers[0];
+        programCounter = (opcode & 0x0FFF) + registers[0];
         break;
 
     case 0xC000:
