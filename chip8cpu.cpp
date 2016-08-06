@@ -247,7 +247,7 @@ void chip8cpu::emulateCycle()
         {
           if((pixel & (0x80 >> xline)) != 0)
           {
-            if(gfx[(x + xline + ((y + yline) * 64))] == 1)
+            if(gfx[(x + xline + ((y + yline) * 64))])
               registers[0xF] = 1;
             gfx[x + xline + ((y + yline) * 64)] ^= 1;
           }
@@ -397,5 +397,22 @@ bool chip8cpu::getDrawFlag()
 
 void chip8cpu::pollKeys()
 {
+    const uint8_t* keyStates = SDL_GetKeyboardState(NULL);
 
+    key[0] = keyStates[SDL_SCANCODE_X];
+    key[1] = keyStates[SDL_SCANCODE_1];
+    key[2] = keyStates[SDL_SCANCODE_2];
+    key[3] = keyStates[SDL_SCANCODE_3];
+    key[4] = keyStates[SDL_SCANCODE_Q];
+    key[5] = keyStates[SDL_SCANCODE_W];
+    key[6] = keyStates[SDL_SCANCODE_E];
+    key[7] = keyStates[SDL_SCANCODE_A];
+    key[8] = keyStates[SDL_SCANCODE_S];
+    key[9] = keyStates[SDL_SCANCODE_D];
+    key[10] = keyStates[SDL_SCANCODE_Z];
+    key[11] = keyStates[SDL_SCANCODE_C];
+    key[12] = keyStates[SDL_SCANCODE_4];
+    key[13] = keyStates[SDL_SCANCODE_R];
+    key[14] = keyStates[SDL_SCANCODE_F];
+    key[15] = keyStates[SDL_SCANCODE_V];
 }

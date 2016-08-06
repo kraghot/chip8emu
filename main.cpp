@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
             break;
         }
 
+        CPU.pollKeys();
+
         CPU.emulateCycle();
 
         if (CPU.getDrawFlag())
