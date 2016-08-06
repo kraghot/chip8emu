@@ -186,18 +186,18 @@ void chip8cpu::emulateCycle()
             registers[X8] -= registers[Y8];
             break;
         case 6:
-            registers[0xF] = registers[X8] & 0x0001;
+            registers[0xF] = registers[X8] & 0x01;
             registers[X8] = registers[X8] >> 1;
             break;
         case 7:
-            if (registers[X8] > registers[Y8])
+            if (registers[Y8] < registers[X8])
                 registers[0xF] = 1;
             else
                 registers[0xF] = 0;
             registers[X8] = registers[Y8] - registers[X8];
             break;
         case 14:
-            registers[0xF] = registers[X8] >> 7;
+            registers[0xF] = registers[X8] & 0x80;
             registers[X8] = registers[X8] << 1;
             break;
 
