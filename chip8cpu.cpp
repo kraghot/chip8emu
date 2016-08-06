@@ -316,9 +316,9 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x0033:
-            memory[indexReg]     = registers[(opcode & 0x0F00) >> 8] / 100;
-            memory[indexReg + 1] = (registers[(opcode & 0x0F00) >> 8] / 10) % 10;
-            memory[indexReg + 2] = (registers[(opcode & 0x0F00) >> 8] % 100);
+            memory[indexReg]     = registers[X8] / 100;
+            memory[indexReg + 1] = (registers[X8] / 10) % 10;
+            memory[indexReg + 2] = registers[X8] % 10;
             break;
 
         case 0x0055:
