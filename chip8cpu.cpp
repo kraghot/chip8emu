@@ -161,13 +161,13 @@ void chip8cpu::emulateCycle()
             registers[X8] = registers[Y8];
             break;
         case 1:
-            registers[X8] = registers[X8] | registers[Y8];
+            registers[X8] |= registers[Y8];
             break;
         case 2:
-            registers[X8] = registers[X8] & registers[Y8];
+            registers[X8] &= registers[Y8];
             break;
         case 3:
-            registers[X8] = registers[X8] ^ registers[Y8];
+            registers[X8] ^= registers[Y8];
             break;
         case 4:
             if (registers[Y8] > (0xFF - X8))
