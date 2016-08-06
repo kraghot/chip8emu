@@ -15,8 +15,10 @@ int main(int argc, char *argv[])
         }
 
         CPU.emulateCycle();
-//        CPU.makeBMP();
-        CPU.drawToWindow();
+
+        if (CPU.getDrawFlag())
+            CPU.drawToWindow();
+
         SDL_Delay(1);
     }
     return 0;

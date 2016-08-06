@@ -97,6 +97,7 @@ void chip8cpu::emulateCycle()
         {
             case 0x0000: // 0x00E0: Clears the screen
             std::fill(std::begin(gfx), std::end(gfx), 0);
+            drawFlag = true;
             programCounter += 2;
             break;
 
@@ -402,4 +403,10 @@ void chip8cpu::drawToWindow()
     }
 
     SDL_RenderPresent(renderer);
+    drawFlag = false;
+}
+
+bool chip8cpu::getDrawFlag()
+{
+    return drawFlag;
 }

@@ -21,6 +21,7 @@ public:
     void emulateCycle();
     void makeBMP();
     void drawToWindow();
+    bool getDrawFlag();
 private:
     bool            Running;
     SDL_Window*     screen;
