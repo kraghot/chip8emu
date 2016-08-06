@@ -262,10 +262,12 @@ void chip8cpu::emulateCycle()
         keyPressedFlag = key[registers[(opcode & 0x0F00) >> 8]];
         switch (opcode & 0x00FF){
             case 0x009E:
-                if(keyPressedFlag) programCounter += 2;
+                if(keyPressedFlag)
+                    programCounter += 2;
                 break;
             case 0x00A1:
-                if(!keyPressedFlag) programCounter += 2;
+                if(!keyPressedFlag)
+                    programCounter += 2;
                 break;
             default:
                 printf("Unknown opcode 0x%X\n", opcode);
