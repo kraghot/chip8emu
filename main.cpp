@@ -6,7 +6,6 @@ SDL_Event Events;
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Hello World!" << std::endl;
     CPU.onInit();
     while(1)
     {
@@ -18,7 +17,7 @@ int main(int argc, char *argv[])
         CPU.emulateCycle();
 //        CPU.makeBMP();
         CPU.drawToWindow();
-        SDL_Delay(1.0f/500.0f /1000.0f);
+        SDL_Delay(1);
     }
     return 0;
 }

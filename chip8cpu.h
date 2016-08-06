@@ -40,7 +40,7 @@ private:
     uint16_t        stack[16];
     uint16_t        stackPointer;
     uint8_t         key[16]         =   {0};
-    bool            drawFlag = false;
+    bool            drawFlag = true;
 
     bitmap_image* image;
 
