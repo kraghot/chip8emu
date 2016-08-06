@@ -324,7 +324,7 @@ void chip8cpu::emulateCycle()
         case 0x0055:
             for (int i = 0; i <= X8; i++)
             {
-                memory[indexReg++] = registers[i];
+                memory[indexReg + i] = registers[i];
             }
             break;
 
