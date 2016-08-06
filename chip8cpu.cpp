@@ -410,3 +410,8 @@ bool chip8cpu::getDrawFlag()
 {
     return drawFlag;
 }
+
+void chip8cpu::pollKeys()
+{
+
+}

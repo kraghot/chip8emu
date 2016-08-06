@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         if (CPU.getDrawFlag())
             CPU.drawToWindow();
 
-        SDL_Delay(1);
+        SDL_Delay(5);
     }
     return 0;
 }

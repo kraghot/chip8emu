@@ -8,8 +8,7 @@ SOURCES += main.cpp \
     chip8cpu.cpp \
 
 HEADERS += \
-    chip8cpu.h \
-    bitmap_image.hpp
+    chip8cpu.h
 
 DISTFILES += \
     test.bmp
