@@ -286,7 +286,16 @@ void chip8cpu::emulateCycle()
             break;
 
         case 0x000A:
-            //implement
+            int sum = 0;
+            for(auto i = 0; i < 16; i++)
+            {
+                sum += key[i];
+                if (key[i])
+                    registers[X8] = i;
+            }
+            if(!sum)
+                programCounter -= 2;
+
             break;
 
         case 0x0015:
@@ -303,7 +312,7 @@ void chip8cpu::emulateCycle()
 
         case 0x0029:
             // Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.
-            indexReg = registers[X8] * 4;
+            indexReg = registers[X8] * 5;
             break;
 
         case 0x0033:
