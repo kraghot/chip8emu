@@ -170,7 +170,7 @@ void chip8cpu::emulateCycle()
             registers[X8] ^= registers[Y8];
             break;
         case 4:
-            if (registers[Y8] > (0xFF - X8))
+            if ((uint16_t)(registers[Y8] + registers[X8]) > 255)
                 registers[0xF] = 1;
             else
                 registers[0xF] = 0;
